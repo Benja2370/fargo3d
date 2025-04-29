@@ -163,4 +163,23 @@ void SubStep1_x_cpu (real dt) {
   }
 #endif
 //<\MAIN_LOOP>
+
+
+//<\Torque-Free Sink term for momentum at current velocity Vx>
+//real gamma = 4;
+//real omegaB = 1;
+//real r_s = 0.1;
+// Posición del planeta????? el calculo es en cada parte de la malla
+/* if (abs(r - r_p)) < r_s
+      si = ( 1 - abs(x-x_i)**2 * r_s**-2 )**2 */
+
+
 }
+
+
+
+
+
+
+
+
