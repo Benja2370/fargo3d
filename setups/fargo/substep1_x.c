@@ -74,6 +74,14 @@ void SubStep1_x_cpu (real dt) {
   real btmean;
 #endif
 #endif
+// Agregados para el SINK
+real dx; 
+real dy;
+real dist2;
+real sink;
+real sinkmom
+real r_s = 0.01
+
 //<\INTERNAL>
 
 //<CONSTANT>
@@ -117,6 +125,39 @@ void SubStep1_x_cpu (real dt) {
 	
 #ifdef POTENTIAL
 	vx_temp[ll] -= (pot[ll]-pot[llxm])*dt*Inv_zone_size_xmed(i,j,k);
+#endif
+
+#ifdef SINKMOM
+/* Hay que definir xplanet e yplanet*/
+  #ifdef CARTESIAN
+    dx = xmed(i)-xplanet;
+	  dy = ymed(j)-yplanet;
+
+  #endif
+  #ifdef CYLINDRICAL
+	  dx = ymed(j)*cos(xmed(i))-xplanet;
+	  dy = ymed(j)*sin(xmed(i))-yplanet;
+
+  #endif
+  /* Que se hace en este caso con k?*/
+  #ifdef SPHERICAL
+	  dx = ymed(j)*cos(xmed(i))*sin(zmed(k))-xplanet;
+	  dy = ymed(j)*sin(xmed(i))*sin(zmed(k))-yplanet;
+
+  #endif
+  
+  dist2 = dx*dx+dy*dy;
+  planet_distance = sqrt(dist2);
+
+  if (planet_distance < r_s){
+    sink = (1 - dist2/(r_s * r_s)) * (1 - dist2/(r_s * r_s));
+  }
+  else{
+    sink = 0;
+  } 
+  /* Definir estas variables*/
+  /* Convertir en vector */
+  sinkmom = - gamma * omegaB * rho * sink
 #endif
 
 #ifdef MHD
