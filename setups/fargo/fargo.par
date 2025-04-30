@@ -27,6 +27,12 @@ Eccentricity		0.0
 ExcludeHill		no
 IndirectTerm		Yes
 
+### Sink parameters
+
+GammaSink   4
+RSink       0.01
+OmegaB      1
+
 ### Mesh parameters
 
 Nx			384		Azimuthal number of zones

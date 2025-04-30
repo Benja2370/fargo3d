@@ -23,6 +23,8 @@ void SubStep1_x_cpu (real dt) {
   INPUT(Bz);
 #endif  
   OUTPUT(Vx_temp);
+  real xplanet = Xplanet;
+  real yplanet = Yplanet;
 //<\USER_DEFINED>
 
 //<EXTERNAL>
@@ -44,6 +46,9 @@ void SubStep1_x_cpu (real dt) {
   int size_y = Ny+2*NGHY-1;
   int size_z = Nz+2*NGHZ-1;
   int fluidtype = Fluidtype;
+  real gammasink = GAMMASINK;
+  real rsink = RSINK;
+  real omegab = OMEGAB;
 //<\EXTERNAL>
   
 //<INTERNAL>
@@ -79,12 +84,14 @@ real dx;
 real dy;
 real dist2;
 real sink;
-real sinkmom
-real r_s = 0.01
-
+real sinkmom;
+real planet_distance;
+real vstar;
 //<\INTERNAL>
 
 //<CONSTANT>
+// real Xplanet(1);
+// real Yplanet(1);
 // real xmin(Nx+2*NGHX+1);
 // real ymin(Ny+2*NGHY+1);
 // real zmin(Nz+2*NGHZ+1);
@@ -128,18 +135,11 @@ real r_s = 0.01
 #endif
 
 #ifdef SINKMOM
-/* Hay que definir xplanet e yplanet*/
-  #ifdef CARTESIAN
-    dx = xmed(i)-xplanet;
-	  dy = ymed(j)-yplanet;
-
-  #endif
   #ifdef CYLINDRICAL
 	  dx = ymed(j)*cos(xmed(i))-xplanet;
 	  dy = ymed(j)*sin(xmed(i))-yplanet;
 
   #endif
-  /* Que se hace en este caso con k?*/
   #ifdef SPHERICAL
 	  dx = ymed(j)*cos(xmed(i))*sin(zmed(k))-xplanet;
 	  dy = ymed(j)*sin(xmed(i))*sin(zmed(k))-yplanet;
@@ -149,15 +149,15 @@ real r_s = 0.01
   dist2 = dx*dx+dy*dy;
   planet_distance = sqrt(dist2);
 
-  if (planet_distance < r_s){
-    sink = (1 - dist2/(r_s * r_s)) * (1 - dist2/(r_s * r_s));
+  if (planet_distance < rsink){
+    sink = (1 - dist2/(rsink * rsink)) * (1 - dist2/(rsink * rsink));
   }
   else{
     sink = 0;
   } 
-  /* Definir estas variables*/
-  /* Convertir en vector */
-  sinkmom = - gamma * omegaB * rho * sink
+  vstar = delta *(vx[ll]*cos(xmed(i)) - 0.25*(vy[ll] + vy[lxm] + vy[lxm-pitch] + vy[lyp]));
+  // Convertir en vector
+  sinkmom = gamma * omegab * 0.5*(rho[ll] + rho[lxm]) * sink 
 #endif
 
 #ifdef MHD
