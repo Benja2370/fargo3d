@@ -15,6 +15,7 @@ void SubStep1_x_cpu (real dt) {
   INPUT(Density);
   INPUT(Pot);
   INPUT(Vx);
+  INPUT(Vy);
 #ifdef MHD
 #if defined (CYLINDRICAL) || defined (SPHERICAL)
   INPUT(Bx);
@@ -35,6 +36,9 @@ void SubStep1_x_cpu (real dt) {
   real* vx      = Vx->field_cpu;
   real* vx_temp = Vx_temp->field_cpu;
 #endif
+#ifdef Y 
+  real* vy = Vy->field_cpu;
+#endif
 #ifdef MHD
   real* bx = Bx->field_cpu;
   real* by = By->field_cpu;
@@ -49,6 +53,7 @@ void SubStep1_x_cpu (real dt) {
   real gammasink = GAMMASINK;
   real rsink = RSINK;
   real omegab = OMEGAB;
+  real delta = DELTA;
 //<\EXTERNAL>
   
 //<INTERNAL>
@@ -86,7 +91,9 @@ real dist2;
 real sink;
 real sinkmom;
 real planet_distance;
-real vstar;
+real planet_angle;
+real vstarx;
+real alpha;
 //<\INTERNAL>
 
 //<CONSTANT>
@@ -148,16 +155,21 @@ real vstar;
   
   dist2 = dx*dx+dy*dy;
   planet_distance = sqrt(dist2);
+  planet_angle = atan(dy/dx); //es así el arcotangente?
+  alpha = planet_distance - xmed(i); 
 
   if (planet_distance < rsink){
     sink = (1 - dist2/(rsink * rsink)) * (1 - dist2/(rsink * rsink));
   }
   else{
     sink = 0;
-  } 
-  vstar = delta *(vx[ll]*cos(xmed(i)) - 0.25*(vy[ll] + vy[lxm] + vy[lxm-pitch] + vy[lyp]));
-  // Convertir en vector
-  sinkmom = gamma * omegab * 0.5*(rho[ll] + rho[lxm]) * sink 
+  }
+  // vy_temp = 0.25*(vy[ll] + vy[lxm] + vy[lxm-pitch] + vy[lyp])
+  vstarx = 0.25*(vy[ll] + vy[lxm] + vy[lxm-pitch] + vy[lyp])*(1-delta)*(sin(alpha)*cos(alpha)) + vx[ll]*(sin(alpha)*sin(alpha)+delta*cos(alpha)*cos(alpha));
+  // Pasar a componente azimutal
+  sinkmom = -gammasink * omegab * 0.5*(rho[ll] + rho[lxm]) * sink * vstarx;
+  
+  vx_temp[ll] += sinkmom;
 #endif
 
 #ifdef MHD

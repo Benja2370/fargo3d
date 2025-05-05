@@ -32,6 +32,9 @@ IndirectTerm		Yes
 GammaSink   4
 RSink       0.01
 OmegaB      1
+DELTA       0
+
+# delta = 0 means torque-free sink 
 
 ### Mesh parameters
 
