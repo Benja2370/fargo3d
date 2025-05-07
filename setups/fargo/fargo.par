@@ -44,8 +44,8 @@ Xmin			-3.14159265358979323844
 Xmax			3.14159265358979323844
 Ymin			0.4		Inner boundary radius
 Ymax			2.5		Outer boundary radius
-OmegaFrame     		1.0005		Angular velocity for the frame of reference (If Frame is F).
-Frame			G		Method for moving the frame of reference
+OmegaFrame     		1.0		Angular velocity for the frame of reference (If Frame is F).
+Frame			F		Method for moving the frame of reference
 
 ### Output control parameters
 

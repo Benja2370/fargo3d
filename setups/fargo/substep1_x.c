@@ -155,7 +155,7 @@ real alpha;
   
   dist2 = dx*dx+dy*dy;
   planet_distance = sqrt(dist2);
-  planet_angle = atan(dy/dx); //es así el arcotangente?
+  planet_angle = atan(yplanet/xplanet); //es así el arcotangente?
   alpha = planet_distance - xmed(i); 
 
   if (planet_distance < rsink){
