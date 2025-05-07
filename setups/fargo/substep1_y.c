@@ -242,6 +242,36 @@ void SubStep1_y_cpu (real dt) {
 #ifdef POTENTIAL
 	  vy_temp[ll] -= (pot[ll]-pot[llym])*dt/(ymed(j)-ymed(j-1));
 #endif //ENDIF POTENTIAL
+
+#ifdef SINKMOM
+  #ifdef CYLINDRICAL
+	  dx = ymed(j)*cos(xmed(i))-xplanet;
+	  dy = ymed(j)*sin(xmed(i))-yplanet;
+
+  #endif
+  #ifdef SPHERICAL
+	  dx = ymed(j)*cos(xmed(i))*sin(zmed(k))-xplanet;
+	  dy = ymed(j)*sin(xmed(i))*sin(zmed(k))-yplanet;
+
+  #endif
+  
+  dist2 = dx*dx+dy*dy;
+  planet_distance = sqrt(dist2);
+  planet_angle = atan(dy/dx); //es así el arcotangente?
+  alpha = planet_distance - xmed(i); 
+
+  if (planet_distance < rsink){
+    sink = (1 - dist2/(rsink * rsink)) * (1 - dist2/(rsink * rsink));
+  }
+  else{
+    sink = 0;
+  }
+  vstary = 0.25*(vy[ll] + vy[lxm] + vy[lxm-pitch] + vy[lyp])*(cos(alpha)*cos(alpha)+delta*sin(alpha)*sin(alpha)) + vx[ll]*(1-delta)*(sin(alpha)*cos(alpha));
+  // Pasar a componente radial
+  sinkmom = -gammasink * omegab * sink * vstary;
+  
+  vy_temp[ll] += sinkmom;
+#endif //ENDIF SINKMOM
 #endif //ENDIF Y
 
 

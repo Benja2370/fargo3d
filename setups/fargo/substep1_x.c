@@ -167,7 +167,7 @@ real alpha;
   // vy_temp = 0.25*(vy[ll] + vy[lxm] + vy[lxm-pitch] + vy[lyp])
   vstarx = 0.25*(vy[ll] + vy[lxm] + vy[lxm-pitch] + vy[lyp])*(1-delta)*(sin(alpha)*cos(alpha)) + vx[ll]*(sin(alpha)*sin(alpha)+delta*cos(alpha)*cos(alpha));
   // Pasar a componente azimutal
-  sinkmom = -gammasink * omegab * 0.5*(rho[ll] + rho[lxm]) * sink * vstarx;
+  sinkmom = -gammasink * omegab * sink * vstarx;
   
   vx_temp[ll] += sinkmom;
 #endif
