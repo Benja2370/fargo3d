@@ -26,6 +26,12 @@ void SubStep1_x_cpu (real dt) {
   OUTPUT(Vx_temp);
   real xplanet = Xplanet;
   real yplanet = Yplanet;
+  // potencial modif
+  real planetmass_taper;
+  if (MASSTAPER == 0.0)
+    planetmass_taper = 1.0;
+  else
+    planetmass_taper = (PhysicalTime >= MASSTAPER ? 1.0 : .5*(1.0-cos(M_PI*PhysicalTime/MASSTAPER)));
 //<\USER_DEFINED>
 
 //<EXTERNAL>
@@ -54,6 +60,10 @@ void SubStep1_x_cpu (real dt) {
   real rsink = RSINK;
   real omegab = OMEGAB;
   real delta = DELTA;
+  // potencial modif
+  real mp = PLANETMASS;
+  real smoothing = THICKNESSSMOOTHING*THICKNESSSMOOTHING;
+  real taper = planetmass_taper;
 //<\EXTERNAL>
   
 //<INTERNAL>
@@ -94,6 +104,13 @@ real planet_distance;
 real planet_angle;
 real vstarx;
 real alpha;
+// Agregados para el potencial modificado
+real r;
+real phi;
+real theta;
+real phi_p   = 0.0;
+real theta_p = M_PI/2.0;
+real rp      = 1.0; 
 //<\INTERNAL>
 
 //<CONSTANT>
@@ -139,6 +156,12 @@ real alpha;
 	
 #ifdef POTENTIAL
 	vx_temp[ll] -= (pot[ll]-pot[llxm])*dt*Inv_zone_size_xmed(i,j,k);
+  r = ymed(j);
+	phi = xmin(i);
+	theta = M_PI/2.0;
+
+	vx_temp[ll] += dt/(r*sin(theta))*G*mp*taper*((sin(phi_p-phi)*r*rp*sin(theta)*sin(theta_p))/pow(-2.*r*rp*(cos(phi_p-phi)*sin(theta)*sin(theta_p)+cos(theta)*cos(theta_p))+rp*rp+r*r+smoothing,1.5));
+
 #endif
 
 #ifdef SINKMOM
@@ -156,7 +179,7 @@ real alpha;
   dist2 = dx*dx+dy*dy;
   planet_distance = sqrt(dist2);
   planet_angle = atan(yplanet/xplanet); //es así el arcotangente?
-  alpha = planet_distance - xmed(i); 
+  alpha = planet_angle - xmed(i); 
 
   if (planet_distance < rsink){
     sink = (1 - dist2/(rsink * rsink)) * (1 - dist2/(rsink * rsink));
@@ -164,9 +187,17 @@ real alpha;
   else{
     sink = 0;
   }
-  // vy_temp = 0.25*(vy[ll] + vy[lxm] + vy[lxm-pitch] + vy[lyp])
+
+  if (delta == 1){
+    vstarx = vx[ll];
+  }
+  else if (delta == 0){
+    vstarx = 0.25*(vy[ll] + vy[lxm] + vy[lxm-pitch] + vy[lyp])*(sin(alpha)*cos(alpha)) + vx[ll]*sin(alpha)*sin(alpha);
+  }
+  else {
   vstarx = 0.25*(vy[ll] + vy[lxm] + vy[lxm-pitch] + vy[lyp])*(1-delta)*(sin(alpha)*cos(alpha)) + vx[ll]*(sin(alpha)*sin(alpha)+delta*cos(alpha)*cos(alpha));
-  // Pasar a componente azimutal
+  }
+
   sinkmom = -gammasink * omegab * sink * vstarx;
   
   vx_temp[ll] += sinkmom;

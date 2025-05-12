@@ -36,6 +36,14 @@ void SubStep1_y_cpu (real dt) {
   INPUT(Bx);
   INPUT(Bz);
 #endif
+  real xplanet = Xplanet;
+  real yplanet = Yplanet; //para el sink
+  // potencial modif
+  real planetmass_taper;
+  if (MASSTAPER == 0.0)
+    planetmass_taper = 1.0;
+  else
+    planetmass_taper = (PhysicalTime >= MASSTAPER ? 1.0 : .5*(1.0-cos(M_PI*PhysicalTime/MASSTAPER)));
 //<\USER_DEFINED>
 
 //<EXTERNAL>
@@ -79,6 +87,14 @@ void SubStep1_y_cpu (real dt) {
   int size_y = Ny+2*NGHY-1;
   int size_z = Nz+2*NGHZ-1;
   int fluidtype = Fluidtype;
+  real gammasink = GAMMASINK;
+  real rsink = RSINK;
+  real omegab = OMEGAB;
+  real delta = DELTA; // Parametros sink
+  // potencial modif
+  real mp = PLANETMASS;
+  real smoothing = THICKNESSSMOOTHING*THICKNESSSMOOTHING;
+  real taper = planetmass_taper;
 //<\EXTERNAL>
 
 //<INTERNAL>
@@ -111,6 +127,23 @@ void SubStep1_y_cpu (real dt) {
 #ifdef SPHERICAL
   real vzz;
 #endif
+// Agregados para el SINK
+real dx; 
+real dy;
+real dist2;
+real sink; // Debería llevar *??
+real sinkmom;
+real planet_distance;
+real planet_angle;
+real vstary;
+real alpha;
+// Agregados para el potencial modificado
+real r;
+real phi;
+real theta;
+real phi_p   = 0.0;
+real theta_p = M_PI/2.0;
+real rp      = 1.0;    
 //<\INTERNAL>
 
 
@@ -266,8 +299,19 @@ void SubStep1_y_cpu (real dt) {
   else{
     sink = 0;
   }
-  vstary = 0.25*(vy[ll] + vy[lxm] + vy[lxm-pitch] + vy[lyp])*(cos(alpha)*cos(alpha)+delta*sin(alpha)*sin(alpha)) + vx[ll]*(1-delta)*(sin(alpha)*cos(alpha));
-  // Pasar a componente radial
+
+  if (delta == 1){
+    vstary = vy[ll];
+  }
+  // Falta interpolar vx[ll]
+  // vphi = .25*(vx_half[ll] + vx_half[llxp] + vx_half[llym] + vx_half[llxp-pitch]); ??
+  else if (delta == 0){
+    vstary = vy[ll] *cos(alpha)*cos(alpha) + vx[ll]*sin(alpha)*cos(alpha); 
+  }
+  else {
+  vstary = vy[ll]*(cos(alpha)*cos(alpha)+delta*sin(alpha)*sin(alpha)) + vx[ll]*(1-delta)*(sin(alpha)*cos(alpha));
+  }
+
   sinkmom = -gammasink * omegab * sink * vstary;
   
   vy_temp[ll] += sinkmom;
