@@ -178,16 +178,18 @@ real rp      = 1.0;
   
   dist2 = dx*dx+dy*dy;
   planet_distance = sqrt(dist2);
-  planet_angle = atan(yplanet/xplanet); //es así el arcotangente?
+  planet_angle = atan(dy/dx); //es así el arcotangente?
   alpha = planet_angle - xmed(i); 
 
+  // Termino sink
   if (planet_distance < rsink){
     sink = (1 - dist2/(rsink * rsink)) * (1 - dist2/(rsink * rsink));
   }
   else{
     sink = 0;
   }
-
+  //
+  // Vector estrella
   if (delta == 1){
     vstarx = vx[ll];
   }
@@ -197,6 +199,7 @@ real rp      = 1.0;
   else {
   vstarx = 0.25*(vy[ll] + vy[lxm] + vy[lxm-pitch] + vy[lyp])*(1-delta)*(sin(alpha)*cos(alpha)) + vx[ll]*(sin(alpha)*sin(alpha)+delta*cos(alpha)*cos(alpha));
   }
+  //
 
   sinkmom = -gammasink * omegab * sink * vstarx;
   
