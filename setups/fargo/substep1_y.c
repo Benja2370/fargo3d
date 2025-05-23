@@ -314,7 +314,7 @@ real rp      = 1.0;
 
   sinkmom = -gammasink * omegab * sink * vstary;
   
-  vy_temp[ll] += sinkmom;
+  vy_temp[ll] += sinkmom * dt;
 #endif //ENDIF SINKMOM
 #endif //ENDIF Y
 

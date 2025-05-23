@@ -203,7 +203,7 @@ real rp      = 1.0;
 
   sinkmom = -gammasink * omegab * sink * vstarx;
   
-  vx_temp[ll] += sinkmom;
+  vx_temp[ll] += sinkmom * dt;
 #endif
 
 #ifdef MHD

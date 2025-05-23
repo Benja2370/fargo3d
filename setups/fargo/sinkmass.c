@@ -7,7 +7,7 @@
 #include "fargo3d.h"
 //<\INCLUDES>
 
-void Edamp_cpu(real dt) {
+void Sinkdens(real dt) {
 
 //<USER_DEFINED>
   INPUT(Density);
@@ -69,7 +69,7 @@ void Edamp_cpu(real dt) {
         //
         sinkdens = -gammasink * omegab * sink * dens[l]; //interpolación?
 
-        dens[l] += sinkdens 
+        dens[l] += sinkdens * dt
 
 //<\#>
       }
