@@ -8,6 +8,8 @@ TimeProcess t_sub1_x;
 TimeProcess t_sub1_y;
 TimeProcess t_sub1_z;
 
+void Sinkdens(real dt);
+
 void FillGhosts (int var) {
 
   InitSpecificTime (&t_Comm, "MPI Communications");
@@ -43,7 +45,7 @@ void Sources(real dt) {
 #endif
   //-----------------------------------------------------------------------------
 
-#ifdef SINK
+#ifdef SINKMASS
   FARGO_SAFE(Sinkdens(dt));
 #endif
 

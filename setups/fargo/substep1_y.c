@@ -127,23 +127,21 @@ void SubStep1_y_cpu (real dt) {
 #ifdef SPHERICAL
   real vzz;
 #endif
-// Agregados para el SINK
-real dx; 
-real dy;
-real dist2;
-real sink; // Debería llevar *??
-real sinkmom;
-real planet_distance;
-real planet_angle;
-real vstary;
-real alpha;
-// Agregados para el potencial modificado
-real r;
-real phi;
-real theta;
-real phi_p   = 0.0;
-real theta_p = M_PI/2.0;
-real rp      = 1.0;    
+  real dx; 
+  real dy;
+  real dist2;
+  real sink; // Debería llevar *??
+  real planet_distance;
+  real planet_angle;
+  real vstary;
+  real alpha;
+  real sinkmomv;
+  real r;
+  real phi;
+  real theta;
+  real phi_p   = 0.0;
+  real theta_p = M_PI/2.0;
+  real rp      = 1.0;    
 //<\INTERNAL>
 
 
@@ -312,9 +310,9 @@ real rp      = 1.0;
   vstary = vy[ll]*(cos(alpha)*cos(alpha)+delta*sin(alpha)*sin(alpha)) + vx[ll]*(1-delta)*(sin(alpha)*cos(alpha));
   }
 
-  sinkmom = -gammasink * omegab * sink * vstary;
+  sinkmomv = -gammasink * omegab * sink * vstary;
   
-  vy_temp[ll] += sinkmom * dt;
+  vy_temp[ll] += sinkmomv * dt;
 #endif //ENDIF SINKMOM
 #endif //ENDIF Y
 

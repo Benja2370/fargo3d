@@ -94,24 +94,22 @@ void SubStep1_x_cpu (real dt) {
   real btmean;
 #endif
 #endif
-// Agregados para el SINK
-real dx; 
-real dy;
-real dist2;
-real sink;
-real sinkmom;
-real planet_distance;
-real planet_angle;
-real vstarx;
-real alpha;
-// Agregados para el potencial modificado
-real r;
-real phi;
-real theta;
-real phi_p   = 0.0;
-real theta_p = M_PI/2.0;
-real rp      = 1.0; 
-//<\INTERNAL>
+  real dx; 
+  real dy;
+  real dist2;
+  real sink;
+  real sinkmomv;
+  real planet_distance;
+  real planet_angle;
+  real vstarx;
+  real alpha;
+  real r;
+  real phi;
+  real theta;
+  real phi_p   = 0.0;
+  real theta_p = M_PI/2.0;
+  real rp      = 1.0; 
+ //<\INTERNAL>
 
 //<CONSTANT>
 // real Xplanet(1);
@@ -201,9 +199,9 @@ real rp      = 1.0;
   }
   //
 
-  sinkmom = -gammasink * omegab * sink * vstarx;
+  sinkmomv = -gammasink * omegab * sink * vstarx;
   
-  vx_temp[ll] += sinkmom * dt;
+  vx_temp[ll] += sinkmomv * dt;
 #endif
 
 #ifdef MHD

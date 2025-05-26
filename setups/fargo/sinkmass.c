@@ -18,7 +18,6 @@ void Sinkdens(real dt) {
 
 //<EXTERNAL>
   real* dens = Density->field_cpu;
-  real edamp = EDAMP;
   int pitch  = Pitch_cpu;
   int stride = Stride_cpu;
   int size_x = Nx;
@@ -69,7 +68,7 @@ void Sinkdens(real dt) {
         //
         sinkdens = -gammasink * omegab * sink * dens[l]; //interpolación?
 
-        dens[l] += sinkdens * dt
+        dens[l] += sinkdens * dt;
 
 //<\#>
       }

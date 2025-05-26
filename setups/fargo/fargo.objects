@@ -1,0 +1,2 @@
+MAINOBJ += sinkmass.o
+GPUOBJ  += sinkmass_gpu.o
