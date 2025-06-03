@@ -291,6 +291,7 @@ void SubStep1_y_cpu (real dt) {
   planet_angle = atan(dy/dx); //es así el arcotangente?
   alpha = planet_distance - xmed(i); 
 
+  // Sink term
   if (planet_distance < rsink){
     sink = (1 - dist2/(rsink * rsink)) * (1 - dist2/(rsink * rsink));
   }
@@ -298,17 +299,9 @@ void SubStep1_y_cpu (real dt) {
     sink = 0;
   }
 
-  if (delta == 1){
-    vstary = vy[ll];
-  }
-  // Falta interpolar vx[ll]
-  // vphi = .25*(vx_half[ll] + vx_half[llxp] + vx_half[llym] + vx_half[llxp-pitch]); ??
-  else if (delta == 0){
-    vstary = vy[ll] *cos(alpha)*cos(alpha) + vx[ll]*sin(alpha)*cos(alpha); 
-  }
-  else {
-  vstary = vy[ll]*(cos(alpha)*cos(alpha)+delta*sin(alpha)*sin(alpha)) + vx[ll]*(1-delta)*(sin(alpha)*cos(alpha));
-  }
+ // starvector v*
+  vstary = vy[ll]*(cos(alpha)*cos(alpha)+delta*sin(alpha)*sin(alpha)) + vphi*(1-delta)*(sin(alpha)*cos(alpha));
+
 
   sinkmomv = -gammasink * omegab * sink * vstary;
   

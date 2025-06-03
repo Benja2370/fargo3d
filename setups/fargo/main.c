@@ -420,6 +420,8 @@ if (*SPACING=='N'){
       
       MULTIFLUID(Transport(dt));
 
+      Sinkdens();
+
       PhysicalTime+=dt;
       Timestepcount++;
 

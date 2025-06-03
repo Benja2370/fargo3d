@@ -179,7 +179,7 @@ void SubStep1_x_cpu (real dt) {
   planet_angle = atan(dy/dx); //es así el arcotangente?
   alpha = planet_angle - xmed(i); 
 
-  // Termino sink
+  // Sink term
   if (planet_distance < rsink){
     sink = (1 - dist2/(rsink * rsink)) * (1 - dist2/(rsink * rsink));
   }
@@ -187,16 +187,10 @@ void SubStep1_x_cpu (real dt) {
     sink = 0;
   }
   //
-  // Vector estrella
-  if (delta == 1){
-    vstarx = vx[ll];
-  }
-  else if (delta == 0){
-    vstarx = 0.25*(vy[ll] + vy[lxm] + vy[lxm-pitch] + vy[lyp])*(sin(alpha)*cos(alpha)) + vx[ll]*sin(alpha)*sin(alpha);
-  }
-  else {
+  // starvector v* 
+ 
   vstarx = 0.25*(vy[ll] + vy[lxm] + vy[lxm-pitch] + vy[lyp])*(1-delta)*(sin(alpha)*cos(alpha)) + vx[ll]*(sin(alpha)*sin(alpha)+delta*cos(alpha)*cos(alpha));
-  }
+  
   //
 
   sinkmomv = -gammasink * omegab * sink * vstarx;
@@ -250,13 +244,7 @@ void SubStep1_x_cpu (real dt) {
 //<\MAIN_LOOP>
 
 
-//<\Torque-Free Sink term for momentum at current velocity Vx>
-//real gamma = 4;
-//real omegaB = 1;
-//real r_s = 0.1;
-// Posición del planeta????? el calculo es en cada parte de la malla
-/* if (abs(r - r_p)) < r_s
-      si = ( 1 - abs(x-x_i)**2 * r_s**-2 )**2 */
+
 
 
 }
