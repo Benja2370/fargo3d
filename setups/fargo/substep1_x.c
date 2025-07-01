@@ -153,7 +153,6 @@ void SubStep1_x_cpu (real dt) {
 	if(fluidtype != DUST) vx_temp[ll] -=  dtOVERrhom*(p[ll]-p[llxm])*Inv_zone_size_xmed(i,j,k);
 	
 #ifdef POTENTIAL
-	vx_temp[ll] -= (pot[ll]-pot[llxm])*dt*Inv_zone_size_xmed(i,j,k);
   r = ymed(j);
 	phi = xmin(i);
 	theta = M_PI/2.0;
@@ -176,7 +175,7 @@ void SubStep1_x_cpu (real dt) {
   
   dist2 = dx*dx+dy*dy;
   planet_distance = sqrt(dist2);
-  planet_angle = atan(dy/dx); //es así el arcotangente?
+  planet_angle = atan(dy/dx); 
   alpha = planet_angle - xmed(i); 
 
   // Sink term

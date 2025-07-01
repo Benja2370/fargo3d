@@ -271,7 +271,11 @@ void SubStep1_y_cpu (real dt) {
 #endif //END SPHERICAL
 
 #ifdef POTENTIAL
-	  vy_temp[ll] -= (pot[ll]-pot[llym])*dt/(ymed(j)-ymed(j-1));
+	  r     = ymin(j);
+    phi   = xmed(i);
+    theta = zmed(k);
+    vy_temp[ll] += -dt*G*( MSTAR/r/r + mp*taper*(r-rp*(cos(phi_p-phi)*sin(theta)*sin(theta_p)+cos(theta)*cos(theta_p)))/pow(-2.*r*rp*(cos(phi_p-phi)*sin(theta)*sin(theta_p)+cos(theta)*cos(theta_p))+rp*rp+r*r+smoothing,1.5));
+
 #endif //ENDIF POTENTIAL
 
 #ifdef SINKMOM
@@ -288,7 +292,7 @@ void SubStep1_y_cpu (real dt) {
   
   dist2 = dx*dx+dy*dy;
   planet_distance = sqrt(dist2);
-  planet_angle = atan(dy/dx); //es así el arcotangente?
+  planet_angle = atan(dy/dx); 
   alpha = planet_distance - xmed(i); 
 
   // Sink term
