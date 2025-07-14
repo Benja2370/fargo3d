@@ -155,7 +155,7 @@ void SubStep1_x_cpu (real dt) {
 #ifdef POTENTIAL
   r = ymed(j);
 	phi = xmin(i);
-	theta = M_PI/2.0;
+	theta = M_PI*0.5;
 
 	vx_temp[ll] += dt/(r*sin(theta))*G*mp*taper*((sin(phi_p-phi)*r*rp*sin(theta)*sin(theta_p))/pow(-2.*r*rp*(cos(phi_p-phi)*sin(theta)*sin(theta_p)+cos(theta)*cos(theta_p))+rp*rp+r*r+smoothing,1.5));
 

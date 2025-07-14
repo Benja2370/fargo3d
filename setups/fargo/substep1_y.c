@@ -273,7 +273,7 @@ void SubStep1_y_cpu (real dt) {
 #ifdef POTENTIAL
 	  r     = ymin(j);
     phi   = xmed(i);
-    theta = zmed(k);
+    theta = M_PI*0.5;
     vy_temp[ll] += -dt*G*( MSTAR/r/r + mp*taper*(r-rp*(cos(phi_p-phi)*sin(theta)*sin(theta_p)+cos(theta)*cos(theta_p)))/pow(-2.*r*rp*(cos(phi_p-phi)*sin(theta)*sin(theta_p)+cos(theta)*cos(theta_p))+rp*rp+r*r+smoothing,1.5));
 
 #endif //ENDIF POTENTIAL
