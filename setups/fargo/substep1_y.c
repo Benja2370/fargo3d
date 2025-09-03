@@ -36,14 +36,9 @@ void SubStep1_y_cpu (real dt) {
   INPUT(Bx);
   INPUT(Bz);
 #endif
-  real xplanet = Xplanet;
-  real yplanet = Yplanet; //para el sink
-  // potencial modif
-  real planetmass_taper;
-  if (MASSTAPER == 0.0)
-    planetmass_taper = 1.0;
-  else
-    planetmass_taper = (PhysicalTime >= MASSTAPER ? 1.0 : .5*(1.0-cos(M_PI*PhysicalTime/MASSTAPER)));
+  // Para planeta fijo desde potencial.c
+  real xplanet = 1.0;
+  real yplanet = 0.0; //para el sink
 //<\USER_DEFINED>
 
 //<EXTERNAL>
@@ -91,10 +86,6 @@ void SubStep1_y_cpu (real dt) {
   real rsink = RSINK;
   real omegab = OMEGAB;
   real delta = DELTA; // Parametros sink
-  // potencial modif
-  real mp = PLANETMASS;
-  real smoothing = THICKNESSSMOOTHING*THICKNESSSMOOTHING;
-  real taper = planetmass_taper;
 //<\EXTERNAL>
 
 //<INTERNAL>
@@ -271,11 +262,7 @@ void SubStep1_y_cpu (real dt) {
 #endif //END SPHERICAL
 
 #ifdef POTENTIAL
-	  r     = ymin(j);
-    phi   = xmed(i);
-    theta = M_PI*0.5;
-    vy_temp[ll] += -dt*G*( MSTAR/r/r + mp*taper*(r-rp*(cos(phi_p-phi)*sin(theta)*sin(theta_p)+cos(theta)*cos(theta_p)))/pow(-2.*r*rp*(cos(phi_p-phi)*sin(theta)*sin(theta_p)+cos(theta)*cos(theta_p))+rp*rp+r*r+smoothing,1.5));
-
+	  vy_temp[ll] -= (pot[ll]-pot[llym])*dt/(ymed(j)-ymed(j-1));
 #endif //ENDIF POTENTIAL
 
 #ifdef SINKMOM

@@ -12,8 +12,9 @@ void Sinkdens(real dt) {
 //<USER_DEFINED>
   INPUT(Density);
   OUTPUT(Density);
-  real xplanet = Xplanet;
-  real yplanet = Yplanet;
+  // Para planeta fijo desde potencial.c
+  real xplanet = 1.0;
+  real yplanet = 0.0; //para el sink
 //<\USER_DEFINED>
 
 //<EXTERNAL>
