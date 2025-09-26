@@ -38,7 +38,8 @@ void SubStep1_y_cpu (real dt) {
 #endif
   // Para planeta fijo desde potencial.c
   real xplanet = 1.0;
-  real yplanet = 0.0; //para el sink
+  real yplanet = 0.0;
+  real zplanet = 0.0; //para el sink
 //<\USER_DEFINED>
 
 //<EXTERNAL>

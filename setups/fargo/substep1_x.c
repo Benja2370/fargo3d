@@ -26,7 +26,8 @@ void SubStep1_x_cpu (real dt) {
   OUTPUT(Vx_temp);
   // Para planeta fijo desde potencial.c
   real xplanet = 1.0;
-  real yplanet = 0.0; //para el sink
+  real yplanet = 0.0;
+  real zplanet = 0.0; //para el sink
 //<\USER_DEFINED>
 
 //<EXTERNAL>
